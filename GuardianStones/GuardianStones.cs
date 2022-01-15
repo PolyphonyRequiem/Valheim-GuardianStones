@@ -47,8 +47,8 @@ namespace GuardianStones
             // Load asset bundle from the filesystem
             var guardianstoneAssetBundle = AssetUtils.LoadAssetBundleFromResources("guardianstones", typeof(GuardianStones).Assembly);
 
-            GameObject spawner = guardianstoneAssetBundle.LoadAsset<GameObject>("skeleton_spawner");
-            PrefabManager.Instance.AddPrefab(spawner); 
+            // GameObject spawner = guardianstoneAssetBundle.LoadAsset<GameObject>("skeleton_spawner");
+            // PrefabManager.Instance.AddPrefab(spawner); 
             
             var locationAsset = guardianstoneAssetBundle.LoadAsset<GameObject>("GuardianStone_Location_Test");
 
