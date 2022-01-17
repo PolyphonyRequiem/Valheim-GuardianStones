@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 1924604628
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: guardianstones
+      Dependencies: {}

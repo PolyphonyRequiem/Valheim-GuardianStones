@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 1825839738
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e00d297b36f537669d42be4567762954
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1d2a224d39f87b46fbbf3ad3304280e5
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -1463640641, guid: 2084f10f14e890740a4930b4e3a745dc, type: 3}
+- Class: 114
+  Script: {fileID: 712945444, guid: 2084f10f14e890740a4930b4e3a745dc, type: 3}
+- Class: 114
+  Script: {fileID: 1516789100, guid: 2084f10f14e890740a4930b4e3a745dc, type: 3}
+- Class: 114
+  Script: {fileID: 1521249158, guid: 2084f10f14e890740a4930b4e3a745dc, type: 3}
+- Class: 114
+  Script: {fileID: -1025493474, guid: 9638ba057c2acde45b3c2735cc76d7cd, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Locations/GuardianStone_Location_Test.prefab
+Dependencies: []

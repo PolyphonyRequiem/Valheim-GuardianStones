@@ -5,30 +5,46 @@
 // Project: JotunnModStub
 
 using BepInEx;
+using HarmonyLib;
 using Jotunn;
 using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using Jotunn.Utils;
+using System;
+using System.IO;
+using System.Reflection;
 using UnityEngine;
 
 namespace GuardianStones
 {
-    [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+    [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     [BepInDependency(Jotunn.Main.ModGuid)]
     //[NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
     internal class GuardianStones : BaseUnityPlugin
     {
-        public const string PluginGUID = "polyphonyrequiem.valheim.guardianstones";
+        public const string PluginGuid = "polyphonyrequiem.valheim.guardianstones";
         public const string PluginName = "GuardianStones";
         public const string PluginVersion = "0.0.1";
-        
+
+        private Harmony harmony;
+
+        public GuardianStones()
+        {
+            string gsmbasm = Path.Combine(new FileInfo(Assembly.GetAssembly(typeof(GuardianStones)).Location).DirectoryName, "GuardianStones.MonoBehaviors.dll");
+            Assembly.LoadFrom(gsmbasm);
+        }
+                
         // Use this class to add your own localization to the game
         // https://valheim-modding.github.io/Jotunn/tutorials/localization.html
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
 
+        private static string menhirLocationName = "GuardianStone_Location_Test";
+
         private void Awake()
         {
+            harmony = Harmony.CreateAndPatchAll(typeof(GuardianStones).Assembly, PluginGuid);
+
             // Jotunn comes with MonoMod Detours enabled for hooking Valheim's code
             // https://github.com/MonoMod/MonoMod
             On.FejdStartup.Awake += FejdStartup_Awake;
@@ -47,29 +63,32 @@ namespace GuardianStones
             // Load asset bundle from the filesystem
             var guardianstoneAssetBundle = AssetUtils.LoadAssetBundleFromResources("guardianstones", typeof(GuardianStones).Assembly);
 
-            // GameObject spawner = guardianstoneAssetBundle.LoadAsset<GameObject>("skeleton_spawner");
-            // PrefabManager.Instance.AddPrefab(spawner); 
-            
-            var locationAsset = guardianstoneAssetBundle.LoadAsset<GameObject>("GuardianStone_Location_Test");
+            var locationAsset = guardianstoneAssetBundle.LoadAsset<GameObject>(menhirLocationName);
 
             if (locationAsset == null)
             {
                 Jotunn.Logger.LogError("Asset failed to load");
             }
 
-            var menhirLocation = ZoneManager.Instance.CreateLocationContainer(locationAsset, true);
-            ZoneManager.Instance.AddCustomLocation(new CustomLocation(menhirLocation, new LocationConfig
+            var menhirLocation = ZoneManager.Instance.CreateLocationContainer(locationAsset);
+            ZoneManager.Instance.AddCustomLocation(
+                new CustomLocation(
+                    menhirLocation, 
+                    fixReference: true,
+                    new LocationConfig
             {
                 Biome = Heightmap.Biome.Meadows,
                 Quantity = 30,
                 Priotized = true,
-                ExteriorRadius = 5f,
+                ExteriorRadius = 3f,
                 MinAltitude = 1f,
                 ClearArea = true,
                 MaxDistance = 150
             }));
 
             ZoneManager.OnVanillaLocationsAvailable -= ZoneManager_OnVanillaLocationsAvailable;
+
+            guardianstoneAssetBundle.Unload(false);
         }
 
         private void FejdStartup_Awake(On.FejdStartup.orig_Awake orig, FejdStartup self)
@@ -82,6 +101,11 @@ namespace GuardianStones
 
             // This code runs after Valheim's FejdStartup.Awake
             Jotunn.Logger.LogInfo("FejdStartup has awoken");
+        }
+
+        private void OnDestroy()
+        {
+            harmony?.UnpatchSelf();
         }
     }
 }
